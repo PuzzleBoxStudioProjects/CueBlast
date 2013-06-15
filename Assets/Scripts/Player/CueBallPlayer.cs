@@ -21,14 +21,12 @@ public class CueBallPlayer : MonoBehaviour
 	//temporary until a better method is used
     public float forceMeterWidth = 128.0f;
 	
-	public int boostMultiplier = 10;
-	
-	private float dragDist = 0.0f;
-	public float meterModifier = 0.0f;
-    public float mouseDir = 0.0f;
+	private float meterModifier = 0.0f;
+    private float mouseDir = 0.0f;
 
 	public int lives = 3;
-
+	public int boostForce = 10;
+	
 	public bool isGrounded = false;
 	
 	public GUITexture forceMeter;
@@ -36,6 +34,8 @@ public class CueBallPlayer : MonoBehaviour
 	public Texture2D[] meterImages;
 
     private Vector3 relativeCam;
+	
+	private Camera cam;
 	
     void Awake()
     {
@@ -52,6 +52,8 @@ public class CueBallPlayer : MonoBehaviour
         forceMeter.transform.localScale = Vector3.zero;
 
         forceMeter.enabled = false;
+		
+		cam = Camera.main;
     }
 
 	// Update is called once per frame
@@ -116,7 +118,7 @@ public class CueBallPlayer : MonoBehaviour
 				rigidbody.velocity = rigidbody.velocity.normalized * maxSpeed;
 			}
 			
-            rigidbody.AddForce(relativeCam * (meterModifier), ForceMode.VelocityChange);
+            rigidbody.AddForce(meterModifier * boostForce * new Vector3(cam.transform.forward.x, 0, cam.transform.forward.z), ForceMode.VelocityChange);
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -133,19 +135,20 @@ public class CueBallPlayer : MonoBehaviour
         float vInput = Input.GetAxis("Vertical") * speed * Time.deltaTime;
 		float hInput = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
 		
-		Vector3 relativeCamRight = Camera.main.transform.TransformDirection(Vector3.right);
-				
-        if (isGrounded)
+		Vector3 relativeCamRight = new Vector3(cam.transform.right.x, 0, cam.transform.right.z);
+		Vector3 relativeCamForward = new Vector3(cam.transform.forward.x, 0, cam.transform.forward.z);
+        
+		if (isGrounded)
         {
             //apply drag when grounded to slow character
             rigidbody.drag = linearDrag;
 			
-			if (rigidbody.velocity.magnitude < maxSpeed)
-			{
+//			if (rigidbody.velocity.magnitude < speed)
+//			{
 		        //apply move force.
-		        rigidbody.AddForceAtPosition(relativeCam * vInput, transform.position, ForceMode.Impulse);
-				rigidbody.AddForceAtPosition(relativeCamRight * hInput, transform.position + new Vector3(0, 0.1f, 0), ForceMode.Impulse);
-			}
+		        rigidbody.AddForceAtPosition(relativeCamForward * vInput, transform.position, ForceMode.Impulse);
+				rigidbody.AddForceAtPosition(relativeCamRight * hInput, transform.position, ForceMode.Impulse);
+//			}
             //apply jump force
             if (Input.GetButtonDown("Jump"))
             {
@@ -190,8 +193,8 @@ public class CueBallPlayer : MonoBehaviour
         isGrounded = false;
 	}
 	
-	void OnCollisionStay()
+	void OnCollisionStay(Collision col)
 	{
-        isGrounded = true;
+		isGrounded = true;
 	}
 }
