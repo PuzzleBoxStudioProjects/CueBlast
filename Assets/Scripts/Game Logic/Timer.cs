@@ -15,11 +15,13 @@ public class Timer : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		//add up time
 		timeElapsed += Time.deltaTime;
 	}
 	
 	void OnGUI()
 	{
+		//display time
 		GUI.Label(new Rect(0, 40, 100, 100), "Time Elapsed  " + timeElapsed.ToString("f2"));
 	}
 }

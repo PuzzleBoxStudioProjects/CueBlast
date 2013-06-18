@@ -6,8 +6,6 @@ public class ScoreMaster : MonoBehaviour
 {
     public static ScoreMaster instance;
 
-    public GameObject pocketHit;
-
     public Vector2 scorePos = Vector2.zero,
                     scoreTextPos = Vector2.zero;
 
@@ -22,7 +20,7 @@ public class ScoreMaster : MonoBehaviour
 
     void Update()
     {
-        AdjustPoints(0);
+        
     }
 
     public void AdjustPoints(int adj)
@@ -33,7 +31,7 @@ public class ScoreMaster : MonoBehaviour
 
     void OnGUI()
     {
-        GUI.skin = skin;
+		//display score
         GUI.Label(new Rect(scorePos.x, scorePos.y, 200, 200), "Score  " + curPoints.ToString());
     }
 }

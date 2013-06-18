@@ -1,9 +1,9 @@
-/*using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Gem : MonoBehaviour 
 {
-	private Vector3 spawnPoint;
+	/*private Vector3 spawnPoint;
 	float FadeOutTime= 0.0f; 
 	bool  FadeOutBool = false;
 	
@@ -53,5 +53,5 @@ public class Gem : MonoBehaviour
 		 for (float t = 0.0f; t < FadeOutTime; t += Time.deltaTime) { 
     renderer.material.color = Color.Lerp (colorStart,colorEnd, t/FadeOutTime); 
 	}
-}
 }*/
+}
