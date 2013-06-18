@@ -193,8 +193,16 @@ public class CueBallPlayer : MonoBehaviour
         isGrounded = false;
 	}
 	
-	void OnCollisionStay(Collision col)
+	void OnCollisionStay()
 	{
 		isGrounded = true;
+	}
+	
+	void OnCollisionEnter(Collision col)
+	{
+		if (col.transform.tag == "OtherBalls")
+		{
+			GameMaster.instance.curHitCount++;
+		}
 	}
 }

@@ -17,8 +17,6 @@ public class ScoreMaster : MonoBehaviour
 
     void Awake()
     {
-        pocketHit = gameObject;
-
         instance = this;
     }
 
@@ -30,12 +28,12 @@ public class ScoreMaster : MonoBehaviour
     public void AdjustPoints(int adj)
     {
         //adjust score multiplied by the combo counter
-        curPoints += adj * Pocket.comboCounter;
+        curPoints += adj * GameMaster.instance.comboCounter;
     }
 
     void OnGUI()
     {
         GUI.skin = skin;
-        GUI.Label(new Rect(scorePos.x, scorePos.y, 200, 200), "Score " + curPoints.ToString());
+        GUI.Label(new Rect(scorePos.x, scorePos.y, 200, 200), "Score  " + curPoints.ToString());
     }
 }

@@ -1,12 +1,16 @@
 using UnityEngine;
 using System.Collections;
 
+[ExecuteInEditMode]
 public class GameMaster : MonoBehaviour
 {
     public static GameMaster instance;
-
+	
+	public int comboCounter = 1;
+	
 	public GameObject[] ballsOnLevel; //set the ball count to the amount of balls in each level
-
+	
+	[HideInInspector]
     public int ballCountOnLevel = 0;
 
 	public Vector2 winButtonPos = Vector2.zero;
@@ -17,7 +21,7 @@ public class GameMaster : MonoBehaviour
 
     public int levelCount = 0,
                 parForLevel = 0,
-                ballHitCountScore = 0;
+                curHitCount = 0;
 
     void Awake()
     {
@@ -33,6 +37,11 @@ public class GameMaster : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		 //reset combo
+        if (curHitCount > 1)
+        {
+            comboCounter = 1;
+        }
         //if (ballCountOnLevel <= 0)
         //{
         //    //win
@@ -45,14 +54,21 @@ public class GameMaster : MonoBehaviour
         //}
 	}
 
-
+	public void ComboSystem()
+	{
+		if (curHitCount == 1)
+		{
+			comboCounter++;
+		}
+	}
     //public void Dead()
     //{
     //    Application.LoadLevel(levelCount);
     //}
 
-    //void OnGUI()
-    //{
+    void OnGUI()
+    {
+		GUI.Label(new Rect(0, 20, 100, 100), "Combo  " + comboCounter.ToString() + "x");
     //    //temporary buttons.
     //    if (hasWon)
     //    {
@@ -68,7 +84,7 @@ public class GameMaster : MonoBehaviour
     //            Application.LoadLevel(Application.loadedLevel);
     //        }
     //    }
-    //}
+    }
 
     //public void Restart()
     //{
