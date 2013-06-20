@@ -9,11 +9,11 @@ public class Pocket : MonoBehaviour
 
     public AudioClip scoreSound;
 	
-	private GameObject gm;
+	private GameObject gameMaster;
 	
     void Awake()
     {
-       gm = GameObject.Find("  Game Master");
+       gameMaster = GameObject.Find("__Game Master");
     }
 
     void OnTriggerEnter(Collider hit)
@@ -26,8 +26,8 @@ public class Pocket : MonoBehaviour
             Instantiate(pocketEmit, transform.position, transform.rotation);
 
             //add the points
-            ScoreMaster sm = gm.GetComponent<ScoreMaster>();
-            sm.AdjustPoints(points);
+            GameMaster gm = gameMaster.GetComponent<GameMaster>();
+            gm.AdjustPoints(points);
 
             audio.PlayOneShot(scoreSound);
 			
