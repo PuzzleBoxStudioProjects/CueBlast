@@ -33,7 +33,7 @@ public class CueBallPlayer : MonoBehaviour
 	
 	public Texture2D[] meterImages;
 
-    private Vector3 relativeCam;
+    private Vector3 relativeCamForward;
 	
 	private Camera cam;
 	
@@ -63,9 +63,8 @@ public class CueBallPlayer : MonoBehaviour
         {
             Screen.lockCursor = false;
         }
-        relativeCam = -(Camera.main.transform.position - transform.position);
-        //keep the Y zeroed out so that axis doesn't change.  we want to stay on the ground.
-        relativeCam.y = 0;
+        relativeCamForward = -(cam.transform.position - transform.position);
+		relativeCamForward.y = 0;
 	}
 
     void FixedUpdate()
@@ -118,7 +117,7 @@ public class CueBallPlayer : MonoBehaviour
 				rigidbody.velocity = rigidbody.velocity.normalized * maxSpeed;
 			}
 			
-            rigidbody.AddForce(meterModifier * boostForce * new Vector3(cam.transform.forward.x, 0, cam.transform.forward.z), ForceMode.VelocityChange);
+            rigidbody.AddForce(meterModifier * boostForce * relativeCamForward, ForceMode.VelocityChange);
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -135,9 +134,10 @@ public class CueBallPlayer : MonoBehaviour
         float vInput = Input.GetAxis("Vertical") * speed * Time.deltaTime;
 		float hInput = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
 		
-		Vector3 relativeCamRight = new Vector3(cam.transform.right.x, 0, cam.transform.right.z);
-		Vector3 relativeCamForward = new Vector3(cam.transform.forward.x, 0, cam.transform.forward.z);
-        
+		Vector3 relativeCamRight = (new Vector3(cam.transform.right.x, 0, 0));
+		
+		relativeCamRight = cam.transform.TransformDirection(relativeCamRight);
+		
 		if (isGrounded)
         {
             //apply drag when grounded to slow character
@@ -146,8 +146,8 @@ public class CueBallPlayer : MonoBehaviour
 //			if (rigidbody.velocity.magnitude < speed)
 //			{
 		        //apply move force.
-		        rigidbody.AddForceAtPosition(relativeCamForward * vInput, transform.position, ForceMode.Impulse);
-				rigidbody.AddForceAtPosition(relativeCamRight * hInput, transform.position, ForceMode.Impulse);
+		        rigidbody.AddForceAtPosition(relativeCamForward.normalized * vInput, transform.position, ForceMode.Impulse);
+				rigidbody.AddForceAtPosition(relativeCamRight.normalized * hInput, transform.position, ForceMode.Impulse);
 //			}
             //apply jump force
             if (Input.GetButtonDown("Jump"))
